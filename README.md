@@ -1,0 +1,1 @@
+#### Wintilx - Window Title for LXPanel
