@@ -1,0 +1,15 @@
+Wintilx - Window Title Plugin for LXPanel
+  https://acamargovieira.github.io/paginas/wintilx.html
+
+[Developers]
+    Alexandre C Vieira  <acamargo.vieira@gmail.com>
+    
+[History]
+Wintilx is a derivative work from lxpanel-window-title [1] written by Matej Kollar.
+
+[Credits]
+Congratulations to Matej Kollar who did a good job with his lxpanel-window-title :-)
+
+* lxpanel.private contains few pieces from lxpanel-0.7.2 source code.
+
+[1] lxpanel-window-title, https://github.com/xkollar/lxpanel-window-title

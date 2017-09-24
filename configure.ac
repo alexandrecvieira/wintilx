@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_COPYRIGHT([Copyright (C) 2013 Matej Kollar.
+AC_COPYRIGHT([Copyright (C) 2017 Alexandre C Vieira.
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -12,12 +12,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Adapted for Debian by Alexandre C Vieira @ 2017])
+along with this program.  If not, see <http://www.gnu.org/licenses/>.])
 
 AC_PREREQ(2.59)
-AC_INIT([wintilx], [1.0.0], [acamargo.vieira@gmail.com])
+AC_INIT([wintilx], [0.0.1], [acamargo.vieira@gmail.com])
 AC_PROG_CC
 
 AC_CONFIG_HEADERS([config.h])
