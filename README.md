@@ -43,5 +43,5 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 ### [0.0.2] - 2017-09-24
 - Fully functional version
 
-### [0.0.1] - 2017-09-23
+### [0.0.1 - Unreleased] - 2017-09-23
 - Code adapted from lxpanel-window-title(written by Matej Kollar).
