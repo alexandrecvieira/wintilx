@@ -20,7 +20,7 @@
 #define PRIVATE_H
 
 #include <lxpanel/plugin.h>
-#include "lxpanel.private/conf.h"
+#include <lxpanel/conf.h>
 
 #include <gmodule.h>
 
