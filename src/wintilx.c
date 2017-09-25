@@ -39,8 +39,6 @@
 #include "lxpanel.private/dbg.h"
 #include "lxpanel.private/private.h"
 
-// #define my_COLOR 0x000000
-
 static const char * desktop_manager = "pcmanfm";
 
 typedef struct {
@@ -105,47 +103,19 @@ static void my_update_current_window_title(WindowTitle * egz) {
 	g_free(old_window_title);
 }
 
-/*static void my_update_current_desktop_name(WindowTitle * egz)
- {
- int number_of_desktop_names;
- char * *  desktop_names = get_utf8_property_list(
- gdk_x11_get_default_root_xwindow(),
- a_NET_DESKTOP_NAMES,
- &number_of_desktop_names);
- if (desktop_names == NULL) {
- return NULL;
- }
- int current_desktop = get_net_current_desktop();
- char * ret = NULL;
-
- if (current_desktop < number_of_desktop_names) {
- ret = g_strdup(desktop_names[current_desktop]);
- } else {
- fprintf(stderr, "Faaaak...\n");
- }
- g_strfreev(desktop_names);
-
- char * old = egz->desktop_name;
- egz->desktop_name = ret;
- g_free(old);
- }*/
-
 static void my_update_main_label(WindowTitle * egz) {
-	//if (egz->desktop_name == NULL) {
-	//    gtk_label_set_markup(GTK_LABEL(egz->label), "");
-	//    return;
-	// }
 	gchar * formated = NULL;
+
 	if (egz->window_title == NULL
 			|| ((g_strcmp0(egz->window_title, desktop_manager) == 0) && (g_strcmp0(egz->app_name, desktop_manager) == 0))) {
 		gtk_label_set_markup(GTK_LABEL(egz->label), "");
-		//formated = g_markup_printf_escaped("<span color=\"#%06x\">%s</span>",
-		//    egz->color, egz->desktop_name);
 	} else {
 		formated = g_markup_printf_escaped("<span color=\"#%06x\"><b>%s</b> - %s</span>", egz->color, egz->app_name,
 				egz->window_title);
 	}
+
 	gtk_label_set_markup(GTK_LABEL(egz->label), formated);
+
 	g_free(formated);
 }
 
@@ -155,9 +125,13 @@ static GdkFilterReturn my_event_filter(GdkXEvent *xevent, GdkEvent *event, gpoin
 
 	ENTER;
 	DBG("win = 0x%x\n", ev->xproperty.window);
+
 	if (ev->type == ConfigureNotify) {
-		if (egz->current_window)
+		if (egz->current_window){
+			my_update_current_window_title(egz);
 			my_update_main_label(egz);
+		}
+
 		RET(GDK_FILTER_CONTINUE);
 	}
 
@@ -170,7 +144,6 @@ static void my_update_title_event(GtkWidget *widget, WindowTitle * egz) {
 }
 
 static void my_update_desktop_event(GtkWidget *widget, WindowTitle * egz) {
-	// my_update_current_desktop_name(egz);
 	my_update_main_label(egz);
 }
 
@@ -186,9 +159,7 @@ static GtkWidget *windowtitle_constructor(LXPanel *panel, config_setting_t *sett
 	} else {
 		egz->color = 0;
 	}
-	// egz->color = my_COLOR;
 
-	// my_update_current_desktop_name(egz);
 	p = gtk_event_box_new();
 
 	lxpanel_plugin_set_data(p, egz, windowtitle_destructor);
@@ -224,7 +195,6 @@ static void windowtitle_destructor(gpointer user_data) {
 	g_signal_handlers_disconnect_by_func(fbev, my_update_desktop_event, egz);
 	g_signal_handlers_disconnect_by_func(fbev, my_update_title_event, egz);
 
-	//g_free(egz->desktop_name);
 	g_free(egz->window_title);
 	g_free(egz->app_name);
 	if (egz->current_window) {
@@ -237,7 +207,9 @@ static void windowtitle_destructor(gpointer user_data) {
 FM_DEFINE_MODULE(lxpanel_gtk, windowtitle);
 
 LXPanelPluginInit fm_module_init_lxpanel_gtk = {
-		.name = N_("Window Title for LXPanel"), .description = N_("Show title of active window if any."),
+		.name = N_("Window Title for LXPanel"),
+		.description = N_("Show title of active window if any."),
 		.expand_available = TRUE,
-		.new_instance = windowtitle_constructor
+		.new_instance = windowtitle_constructor,
+		.one_per_system = 1
 };
