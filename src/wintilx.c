@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2013 Matej Kollar
+ * Copyright (c) 2017 Alexandre C Vieira
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
-/* Adapted for Debian by Alexandre C Vieira */
+/* Code adapted from lxpanel-window-title(written by Matej Kollar) */
 
 #include <config.h>
 #include <stdio.h>
@@ -50,11 +50,11 @@ typedef struct {
 	char * app_name;
 	Atom title_source;
 	guint32 * color;
-} WindowTitle;
+} WintilxPlugin;
 
-static void windowtitle_destructor(gpointer user_data);
+static void wintilx_destructor(gpointer user_data);
 
-static void my_update_current_window_title(WindowTitle * egz) {
+static void wintilx_update_current_window_title(WintilxPlugin * wtlx) {
 	char * title = NULL;
 	char * app_name = NULL;
 	Atom title_source = None;
@@ -83,53 +83,54 @@ static void my_update_current_window_title(WindowTitle * egz) {
 
 		XGetClassHint(GDK_DISPLAY(), *f, app);
 		app_name = app->res_name;
-		egz->app_name = app_name;
+		wtlx->app_name = app_name;
 	}
 
 	if (app != NULL) {
 		XFree(app);
 	}
 
-	Window * old_window = egz->current_window;
-	egz->current_window = f;
+	Window * old_window = wtlx->current_window;
+	wtlx->current_window = f;
 	if (old_window != NULL) {
 		XFree(old_window);
 	}
 
-	egz->title_source = title_source;
+	wtlx->title_source = title_source;
 
-	char * old_window_title = egz->window_title;
-	egz->window_title = title;
+	char * old_window_title = wtlx->window_title;
+	wtlx->window_title = title;
 	g_free(old_window_title);
 }
 
-static void my_update_main_label(WindowTitle * egz) {
+static void wintilx_update_main_label(WintilxPlugin * wtlx) {
 	gchar * formated = NULL;
 
-	if (egz->window_title == NULL
-			|| ((g_strcmp0(egz->window_title, desktop_manager) == 0) && (g_strcmp0(egz->app_name, desktop_manager) == 0))) {
-		gtk_label_set_markup(GTK_LABEL(egz->label), "");
+	if (wtlx->window_title == NULL
+			|| ((g_strcmp0(wtlx->window_title, desktop_manager) == 0)
+					&& (g_strcmp0(wtlx->app_name, desktop_manager) == 0))) {
+		gtk_label_set_markup(GTK_LABEL(wtlx->label), "");
 	} else {
-		formated = g_markup_printf_escaped("<span color=\"#%06x\"><b>%s</b> - %s</span>", egz->color, egz->app_name,
-				egz->window_title);
+		formated = g_markup_printf_escaped("<span color=\"#%06x\"><b>%s</b> - %s</span>", wtlx->color, wtlx->app_name,
+				wtlx->window_title);
 	}
 
-	gtk_label_set_markup(GTK_LABEL(egz->label), formated);
+	gtk_label_set_markup(GTK_LABEL(wtlx->label), formated);
 
 	g_free(formated);
 }
 
-static GdkFilterReturn my_event_filter(GdkXEvent *xevent, GdkEvent *event, gpointer user_data) {
-	WindowTitle * egz = (WindowTitle *) user_data;
+static GdkFilterReturn wintilx_event_filter(GdkXEvent *xevent, GdkEvent *event, gpointer user_data) {
+	WintilxPlugin * wtlx = (WintilxPlugin *) user_data;
 	XEvent *ev = (XEvent *) xevent;
 
 	ENTER;
 	DBG("win = 0x%x\n", ev->xproperty.window);
 
 	if (ev->type == ConfigureNotify) {
-		if (egz->current_window){
-			my_update_current_window_title(egz);
-			my_update_main_label(egz);
+		if (wtlx->current_window) {
+			wintilx_update_current_window_title(wtlx);
+			wintilx_update_main_label(wtlx);
 		}
 
 		RET(GDK_FILTER_CONTINUE);
@@ -138,78 +139,80 @@ static GdkFilterReturn my_event_filter(GdkXEvent *xevent, GdkEvent *event, gpoin
 	return GDK_FILTER_CONTINUE;
 }
 
-static void my_update_title_event(GtkWidget *widget, WindowTitle * egz) {
-	my_update_current_window_title(egz);
-	my_update_main_label(egz);
+static void wintilx_update_title_event(GtkWidget *widget, WintilxPlugin * wtlx) {
+	wintilx_update_current_window_title(wtlx);
+	wintilx_update_main_label(wtlx);
 }
 
-static void my_update_desktop_event(GtkWidget *widget, WindowTitle * egz) {
-	my_update_main_label(egz);
+static void wintilx_update_desktop_event(GtkWidget *widget, WintilxPlugin * wtlx) {
+	wintilx_update_main_label(wtlx);
 }
 
-static GtkWidget *windowtitle_constructor(LXPanel *panel, config_setting_t *settings) {
-	WindowTitle * egz = g_new0(WindowTitle, 1);
+static GtkWidget *wintilx_constructor(LXPanel *panel, config_setting_t *settings) {
+	WintilxPlugin * wtlx = g_new0(WintilxPlugin, 1);
 	GtkWidget *p;
 
-	g_return_val_if_fail(egz != NULL, 0);
-	egz->panel = panel;
+	g_return_val_if_fail(wtlx != NULL, 0);
+	wtlx->panel = panel;
 
-	if (egz->panel->priv->usefontcolor) {
-		egz->color = gcolor2rgb24(&egz->panel->priv->gfontcolor);
+	if (wtlx->panel->priv->usefontcolor) {
+		wtlx->color = gcolor2rgb24(&wtlx->panel->priv->gfontcolor);
 	} else {
-		egz->color = 0;
+		wtlx->color = 0;
 	}
 
 	p = gtk_event_box_new();
 
-	lxpanel_plugin_set_data(p, egz, windowtitle_destructor);
+	lxpanel_plugin_set_data(p, wtlx, wintilx_destructor);
 
-	egz->label = gtk_label_new(NULL);
+	wtlx->label = gtk_label_new(NULL);
 
-	gtk_container_add(GTK_CONTAINER(p), egz->label);
+	gtk_container_add(GTK_CONTAINER(p), wtlx->label);
 
-	gtk_label_set_text(GTK_LABEL(egz->label), "Welcome...");
+	gtk_label_set_text(GTK_LABEL(wtlx->label), "Welcome...");
 
-	gtk_widget_show(egz->label);
+	gtk_widget_show(wtlx->label);
 
-	my_update_main_label(egz);
+	wintilx_update_main_label(wtlx);
 
-	gdk_window_add_filter(gdk_get_default_root_window (), (GdkFilterFunc)my_event_filter, (gpointer) egz);
+	gdk_window_add_filter(gdk_get_default_root_window(), (GdkFilterFunc) wintilx_event_filter, (gpointer) wtlx);
 
-	g_signal_connect(G_OBJECT (fbev), "active_window", G_CALLBACK (my_update_title_event), (gpointer ) egz);
-	g_signal_connect(G_OBJECT (fbev), "client_list", G_CALLBACK (my_update_title_event), (gpointer ) egz);
-	g_signal_connect(G_OBJECT (fbev), "client_list_stacking", G_CALLBACK (my_update_title_event), (gpointer ) egz);
+	g_signal_connect(G_OBJECT (fbev), "active_window", G_CALLBACK (wintilx_update_title_event), (gpointer ) wtlx);
+	g_signal_connect(G_OBJECT (fbev), "client_list", G_CALLBACK (wintilx_update_title_event), (gpointer ) wtlx);
+	g_signal_connect(G_OBJECT (fbev), "client_list_stacking", G_CALLBACK (wintilx_update_title_event),
+			(gpointer ) wtlx);
 
-	g_signal_connect(G_OBJECT (fbev), "current_desktop", G_CALLBACK (my_update_desktop_event), (gpointer ) egz);
-	g_signal_connect(G_OBJECT (fbev), "desktop_names", G_CALLBACK (my_update_desktop_event), (gpointer ) egz);
-	g_signal_connect(G_OBJECT (fbev), "number_of_desktops", G_CALLBACK (my_update_desktop_event), (gpointer ) egz);
+	g_signal_connect(G_OBJECT (fbev), "current_desktop", G_CALLBACK (wintilx_update_desktop_event), (gpointer ) wtlx);
+	g_signal_connect(G_OBJECT (fbev), "desktop_names", G_CALLBACK (wintilx_update_desktop_event), (gpointer ) wtlx);
+	g_signal_connect(G_OBJECT (fbev), "number_of_desktops", G_CALLBACK (wintilx_update_desktop_event),
+			(gpointer ) wtlx);
 
 	return p;
 }
 
-static void windowtitle_destructor(gpointer user_data) {
-	WindowTitle * egz = (WindowTitle *) user_data;
+static void wintilx_destructor(gpointer user_data) {
+	WintilxPlugin * wtlx = (WintilxPlugin *) user_data;
 
-	gdk_window_remove_filter(gdk_get_default_root_window (), (GdkFilterFunc)my_event_filter, egz);
+	gdk_window_remove_filter(gdk_get_default_root_window(), (GdkFilterFunc) wintilx_event_filter, wtlx);
 
-	g_signal_handlers_disconnect_by_func(fbev, my_update_desktop_event, egz);
-	g_signal_handlers_disconnect_by_func(fbev, my_update_title_event, egz);
+	g_signal_handlers_disconnect_by_func(fbev, wintilx_update_desktop_event, wtlx);
+	g_signal_handlers_disconnect_by_func(fbev, wintilx_update_title_event, wtlx);
 
-	g_free(egz->window_title);
-	g_free(egz->app_name);
-	if (egz->current_window) {
-		XFree(egz->current_window);
+	g_free(wtlx->window_title);
+	g_free(wtlx->app_name);
+	if (wtlx->current_window) {
+		XFree(wtlx->current_window);
 	}
-	gtk_widget_destroy(egz->label);
-	g_free(egz);
+	gtk_widget_destroy(wtlx->label);
+	g_free(wtlx);
 }
 
-FM_DEFINE_MODULE(lxpanel_gtk, windowtitle);
+FM_DEFINE_MODULE(lxpanel_gtk, wintilx);
 
 LXPanelPluginInit fm_module_init_lxpanel_gtk = {
 		.name = N_("Window Title for LXPanel"),
 		.description = N_("Show title of active window if any."),
 		.expand_available = TRUE,
-		.new_instance = windowtitle_constructor,
+		.new_instance = wintilx_constructor,
 		.one_per_system = 1
 };
