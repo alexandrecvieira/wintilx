@@ -1,8 +1,15 @@
-[0.0.3] - 2017-09-25
-* Replaced the LXPanel-0.7.2 conf.h header with the header installed on the system(/usr/include/lxpanel/conf.h)
 
-[0.0.2] - 2017-09-24
-* Fully functional version
+2017-09-25  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
-[0.0.1 - Unreleased] - 2017-09-23
-* Code adapted from lxpanel-window-title(written by Matej Kollar).
+	* Changelog update
+	* Changelog update
+	* Substituindo o header conf.h do LXPanel-0.7.2 pelo header instalado no sistema(/usr/include/lxpanel/conf.h)
+	* Merge branch 'master' of https://github.com/acamargovieira/wintilx.git
+	* Changelog update
+	* Changelog update
+
+2017-09-24  Alexandre C Vieira <acamargo.vieira@gmail.com>
+
+	* Versão 0.0.2 - Totalmente funcional
+	* Comentários desnecessários apagados, configurado para permitir apenas uma instância
+	* Autores, changelog, copyright e readme atualizados

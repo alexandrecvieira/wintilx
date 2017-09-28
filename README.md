@@ -38,10 +38,10 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 ## CHANGELOG
 
 ### [0.0.3] - 2017-09-25
-- Replaced the LXPanel-0.7.2 conf.h header with the header installed on the system(/usr/include/lxpanel/conf.h)
+* Replaced the LXPanel-0.7.2 conf.h header with the header installed on the system(/usr/include/lxpanel/conf.h)
 
 ### [0.0.2] - 2017-09-24
-- Fully functional version
+* Fully functional version
 
 ### [0.0.1 - Unreleased] - 2017-09-23
-- Code adapted from lxpanel-window-title(written by Matej Kollar).
+* Code adapted from lxpanel-window-title(written by Matej Kollar).
