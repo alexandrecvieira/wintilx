@@ -31,7 +31,7 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 
 ##### Então você terá o título da janela ativa aparecendo no LXPanel:
 	
-![wintilx](https://user-images.githubusercontent.com/20074560/30779197-3c1e6ba4-a0c0-11e7-848f-aa2df4ea80fb.png)
+![wintilx](https://user-images.githubusercontent.com/20074560/31030072-66c0fc28-a52a-11e7-8394-cd397e242325.gif)
 
 ##### Testado no LXPanel versões 0.7.2 | 0.8.2 | 0.9.3 
 
