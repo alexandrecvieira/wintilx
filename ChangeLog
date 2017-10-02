@@ -1,15 +1,15 @@
 
+2017-09-28  Alexandre C Vieira <acamargo.vieira@gmail.com>
+
+	* Merge branch 'master' of https://github.com/acamargovieira/wintilx.git
+
 2017-09-25  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
-	* Changelog update
-	* Changelog update
+	* Ajuste no arquivo AUTHORS
 	* Substituindo o header conf.h do LXPanel-0.7.2 pelo header instalado no sistema(/usr/include/lxpanel/conf.h)
 	* Merge branch 'master' of https://github.com/acamargovieira/wintilx.git
-	* Changelog update
-	* Changelog update
 
 2017-09-24  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
 	* Versão 0.0.2 - Totalmente funcional
 	* Comentários desnecessários apagados, configurado para permitir apenas uma instância
-	* Autores, changelog, copyright e readme atualizados
