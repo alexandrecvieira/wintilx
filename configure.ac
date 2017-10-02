@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Code adapted from lxpanel-window-title(written by Matej Kollar)])
 
 AC_PREREQ(2.59)
-AC_INIT([wintilx], [0.0.1], [acamargo.vieira@gmail.com])
+AC_INIT([wintilx], [1.0.0], [acamargo.vieira@gmail.com])
 AC_PROG_CC
 
 AC_CONFIG_HEADERS([config.h])
