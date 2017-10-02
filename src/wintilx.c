@@ -210,8 +210,8 @@ static void wintilx_destructor(gpointer user_data) {
 FM_DEFINE_MODULE(lxpanel_gtk, wintilx);
 
 LXPanelPluginInit fm_module_init_lxpanel_gtk = {
-		.name = N_("Window Title for LXPanel"),
-		.description = N_("Show title of active window if any."),
+		.name = "Window Title for LXPanel 0.0.4",
+		.description = "Show title of active window if any.",
 		.expand_available = TRUE,
 		.new_instance = wintilx_constructor,
 		.one_per_system = 1
