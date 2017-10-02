@@ -37,6 +37,9 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 
 ## CHANGELOG
 
+### [0.0.4] - 2017-10-01
+* Mostra versão junto do nome ao pressionar botão direito do mouse
+
 ### [0.0.3] - 2017-09-25
 - Replaced the LXPanel-0.7.2 conf.h header with the header installed on the system(/usr/include/lxpanel/conf.h)
 
