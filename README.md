@@ -34,3 +34,15 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 ![wintilx](https://user-images.githubusercontent.com/20074560/31030072-66c0fc28-a52a-11e7-8394-cd397e242325.gif)
 
 ##### Testado no LXPanel versões 0.7.2 | 0.8.2 | 0.9.3 
+
+## CHANGELOG
+
+### [Unreleased]
+
+### [1.0.0] - 2017-10-02
+#### Removed
+- Mostra versão junto do nome ao pressionar botão direito do mouse
+
+### [0.0.3] - 2017-09-25 [YANKED]
+
+### [0.0.2] - 2017-09-24 [YANKED]
