@@ -43,6 +43,8 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 #### Removed
 - Mostra versão junto do nome ao pressionar botão direito do mouse
 
+### [0.0.4] - 2017-10-01 [YANKED]
+
 ### [0.0.3] - 2017-09-25 [YANKED]
 
 ### [0.0.2] - 2017-09-24 [YANKED]
