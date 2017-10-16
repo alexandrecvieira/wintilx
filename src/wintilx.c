@@ -124,8 +124,8 @@ static GdkFilterReturn wintilx_event_filter(GdkXEvent *xevent, GdkEvent *event, 
 	WintilxPlugin * wtlx = (WintilxPlugin *) user_data;
 	XEvent *ev = (XEvent *) xevent;
 
-	ENTER;
-	DBG("win = 0x%x\n", ev->xproperty.window);
+	// ENTER;
+	// DBG("win = 0x%x\n", ev->xproperty.window);
 
 	if (ev->type == ConfigureNotify) {
 		if (wtlx->current_window) {
@@ -145,6 +145,7 @@ static void wintilx_update_title_event(GtkWidget *widget, WintilxPlugin * wtlx) 
 }
 
 static void wintilx_update_desktop_event(GtkWidget *widget, WintilxPlugin * wtlx) {
+	wintilx_update_current_window_title(wtlx);
 	wintilx_update_main_label(wtlx);
 }
 
