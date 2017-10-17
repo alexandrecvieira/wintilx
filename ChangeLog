@@ -1,4 +1,12 @@
 
+2017-10-17  Alexandre C Vieira <acamargo.vieira@gmail.com>
+
+	* wintilx.c (wintilx_event_filter): Adicionado evento MapNotify.
+
+2017-10-16  Alexandre C Vieira <acamargo.vieira@gmail.com>
+
+	* wintilx.c (wintilx_update_desktop_event): Adicionada função wintilx_update_current_window_title.
+
 2017-10-02  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
 	* Merge branch 'master' of https://github.com/acamargovieira/wintilx.git
@@ -18,19 +26,10 @@
 2017-09-25  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
 	* Ajuste no arquivo AUTHORS
-
-2017-09-25  Alexandre C Vieira <acamargo.vieira@gmail.com>
-
 	* Substituindo o header conf.h do LXPanel-0.7.2 pelo header instalado no sistema(/usr/include/lxpanel/conf.h)
-
-2017-09-25  Alexandre C Vieira <acamargo.vieira@gmail.com>
-
 	* Merge branch 'master' of https://github.com/acamargovieira/wintilx.git
 
 2017-09-24  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
 	* Versão 0.0.2 - Totalmente funcional
-
-2017-09-24  Alexandre C Vieira <acamargo.vieira@gmail.com>
-
 	* Comentários desnecessários apagados, configurado para permitir apenas uma instância
