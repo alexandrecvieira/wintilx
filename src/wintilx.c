@@ -127,7 +127,7 @@ static GdkFilterReturn wintilx_event_filter(GdkXEvent *xevent, GdkEvent *event, 
 	// ENTER;
 	// DBG("win = 0x%x\n", ev->xproperty.window);
 
-	if (ev->type == ConfigureNotify) {
+	if (ev->type == ConfigureNotify || ev->type == MapNotify) {
 		if (wtlx->current_window) {
 			wintilx_update_current_window_title(wtlx);
 			wintilx_update_main_label(wtlx);
