@@ -1,6 +1,7 @@
 
 2017-10-17  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
+	* wintilx.c (wintilx_event_filter): Adicionados eventos CreateNotify, DestroyNotify e UnmapNotify
 	* wintilx.c (wintilx_event_filter): Adicionado evento MapNotify.
 
 2017-10-16  Alexandre C Vieira <acamargo.vieira@gmail.com>
