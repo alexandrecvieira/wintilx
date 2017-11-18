@@ -39,26 +39,27 @@
 #include "lxpanel.private/dbg.h"
 #include "lxpanel.private/private.h"
 
-static const char * desktop_manager = "pcmanfm";
+static const char *desktop_manager = "pcmanfm";
 
 typedef struct {
-	LXPanel * panel;
-	GtkWidget * label;
-	Window * current_window;
-	//char * desktop_name;
-	char * window_title;
-	char * app_name;
+	LXPanel *panel;
+	GtkWidget *label;
+	Window *current_window;
+	//char *desktop_name;
+	char *window_title;
+	char *app_name;
+	char *version;
 	Atom title_source;
-	guint32 * color;
+	guint32 *color;
 } WintilxPlugin;
 
 static void wintilx_destructor(gpointer user_data);
 
-static void wintilx_update_current_window_title(WintilxPlugin * wtlx) {
-	char * title = NULL;
-	char * app_name = NULL;
+static void wintilx_update_current_window_title(WintilxPlugin *wtlx) {
+	char *title = NULL;
+	char *app_name = NULL;
 	Atom title_source = None;
-	Window * f = get_xaproperty(gdk_x11_get_default_root_xwindow(), a_NET_ACTIVE_WINDOW, XA_WINDOW, 0);
+	Window *f = get_xaproperty(gdk_x11_get_default_root_xwindow(), a_NET_ACTIVE_WINDOW, XA_WINDOW, 0);
 
 	XClassHint *app = XAllocClassHint();
 
@@ -90,7 +91,7 @@ static void wintilx_update_current_window_title(WintilxPlugin * wtlx) {
 		XFree(app);
 	}
 
-	Window * old_window = wtlx->current_window;
+	Window *old_window = wtlx->current_window;
 	wtlx->current_window = f;
 	if (old_window != NULL) {
 		XFree(old_window);
@@ -98,13 +99,13 @@ static void wintilx_update_current_window_title(WintilxPlugin * wtlx) {
 
 	wtlx->title_source = title_source;
 
-	char * old_window_title = wtlx->window_title;
+	char *old_window_title = wtlx->window_title;
 	wtlx->window_title = title;
 	g_free(old_window_title);
 }
 
-static void wintilx_update_main_label(WintilxPlugin * wtlx) {
-	gchar * formated = NULL;
+static void wintilx_update_main_label(WintilxPlugin *wtlx) {
+	gchar *formated = NULL;
 
 	if (wtlx->window_title == NULL
 			|| ((g_strcmp0(wtlx->window_title, desktop_manager) == 0)
@@ -121,14 +122,16 @@ static void wintilx_update_main_label(WintilxPlugin * wtlx) {
 }
 
 static GdkFilterReturn wintilx_event_filter(GdkXEvent *xevent, GdkEvent *event, gpointer user_data) {
-	WintilxPlugin * wtlx = (WintilxPlugin *) user_data;
+	WintilxPlugin *wtlx = (WintilxPlugin *) user_data;
 	XEvent *ev = (XEvent *) xevent;
 
-	// ENTER;
+	ENTER;
 	// DBG("win = 0x%x\n", ev->xproperty.window);
 
-	if (ev->type == ConfigureNotify || ev->type == MapNotify || ev->type == CreateNotify || ev->type == DestroyNotify
-			|| ev->type == UnmapNotify) {
+	wtlx->current_window = get_xaproperty(gdk_x11_get_default_root_xwindow(), a_NET_ACTIVE_WINDOW, XA_WINDOW, 0);
+
+	if (ev->type == CreateNotify || ev->type == DestroyNotify || ev->type == UnmapNotify || ev->type == MapNotify
+			|| ev->type == ReparentNotify || ev->type == ConfigureNotify) {
 		if (wtlx->current_window) {
 			wintilx_update_current_window_title(wtlx);
 			wintilx_update_main_label(wtlx);
@@ -140,18 +143,18 @@ static GdkFilterReturn wintilx_event_filter(GdkXEvent *xevent, GdkEvent *event, 
 	return GDK_FILTER_CONTINUE;
 }
 
-static void wintilx_update_title_event(GtkWidget *widget, WintilxPlugin * wtlx) {
+static void wintilx_update_title_event(GtkWidget *widget, WintilxPlugin *wtlx) {
 	wintilx_update_current_window_title(wtlx);
 	wintilx_update_main_label(wtlx);
 }
 
-static void wintilx_update_desktop_event(GtkWidget *widget, WintilxPlugin * wtlx) {
+static void wintilx_update_desktop_event(GtkWidget *widget, WintilxPlugin *wtlx) {
 	wintilx_update_current_window_title(wtlx);
 	wintilx_update_main_label(wtlx);
 }
 
 static GtkWidget *wintilx_constructor(LXPanel *panel, config_setting_t *settings) {
-	WintilxPlugin * wtlx = g_new0(WintilxPlugin, 1);
+	WintilxPlugin *wtlx = g_new0(WintilxPlugin, 1);
 	GtkWidget *p;
 
 	g_return_val_if_fail(wtlx != NULL, 0);
@@ -168,6 +171,8 @@ static GtkWidget *wintilx_constructor(LXPanel *panel, config_setting_t *settings
 	lxpanel_plugin_set_data(p, wtlx, wintilx_destructor);
 
 	wtlx->label = gtk_label_new(NULL);
+
+	wtlx->version = VERSION;
 
 	gtk_container_add(GTK_CONTAINER(p), wtlx->label);
 
@@ -193,7 +198,7 @@ static GtkWidget *wintilx_constructor(LXPanel *panel, config_setting_t *settings
 }
 
 static void wintilx_destructor(gpointer user_data) {
-	WintilxPlugin * wtlx = (WintilxPlugin *) user_data;
+	WintilxPlugin *wtlx = (WintilxPlugin *) user_data;
 
 	gdk_window_remove_filter(gdk_get_default_root_window(), (GdkFilterFunc) wintilx_event_filter, wtlx);
 
@@ -209,12 +214,27 @@ static void wintilx_destructor(gpointer user_data) {
 	g_free(wtlx);
 }
 
+/* Callback when the configuration dialog is to be shown. */
+static GtkWidget *wintilx_configure(LXPanel *panel, GtkWidget *p) {
+
+	WintilxPlugin *wtlx = lxpanel_plugin_get_data(p);
+
+	return lxpanel_generic_config_dlg("Window Title", panel,
+			NULL, p,
+			g_strconcat("Wintilx ", g_strdup(wtlx->version), NULL), NULL, CONF_TYPE_TRIM,
+			"Window Title Plugin for LXPanel", NULL, CONF_TYPE_TRIM,
+			"Copyright (C) 2017", NULL, CONF_TYPE_TRIM,
+			" ", NULL, CONF_TYPE_TRIM,
+			NULL);
+}
+
 FM_DEFINE_MODULE(lxpanel_gtk, wintilx);
 
 LXPanelPluginInit fm_module_init_lxpanel_gtk = {
-		.name = "Window Title for LXPanel",
+		.name = "Window Title",
 		.description = "Show title of active window if any.",
 		.expand_available = TRUE,
 		.new_instance = wintilx_constructor,
+		.config = wintilx_configure,
 		.one_per_system = 1
 };

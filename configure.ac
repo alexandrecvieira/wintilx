@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Code adapted from lxpanel-window-title(written by Matej Kollar)])
 
 AC_PREREQ(2.59)
-AC_INIT([wintilx], [1.0.0], [acamargo.vieira@gmail.com])
+AC_INIT([wintilx], [1.0.1], [acamargo.vieira@gmail.com])
 AC_PROG_CC
 
 AC_CONFIG_HEADERS([config.h])
@@ -41,7 +41,13 @@ AC_DISABLE_STATIC
 
 PKG_CHECK_MODULES(GTK2, [gtk+-2.0])
 PKG_CHECK_MODULES(GLIB2, [glib-2.0])
+AC_CHECK_FUNCS([strstr])
 
-AC_CONFIG_FILES(Makefile
-                src/Makefile)
+ac_version_subst_str=`echo $VERSION | awk -F '.' '/.*/ { printf "VERSION_MAJOR=%d VERSION_MINOR=%d VERSION_MICRO=%d", $1, $2, $3 }'`
+eval ${ac_version_subst_str}
+AC_SUBST(VERSION_MAJOR)
+AC_SUBST(VERSION_MINOR)
+AC_SUBST(VERSION_MICRO)
+
+AC_CONFIG_FILES(Makefile src/Makefile)
 AC_OUTPUT
