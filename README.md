@@ -21,6 +21,7 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 ##### Usei o Eclipse Neon(4.6) para implementar o projeto
 	git clone https://github.com/acamargovieira/wintilx.git
 	cd wintilx
+	autoreconf -f
 	./configure --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu/lxpanel/plugins
 	make
 	sudo make install
@@ -38,6 +39,14 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 ## CHANGELOG
 
 ### [Unreleased]
+
+### [1.0.1] - 2017-10-02
+#### Fixed
+- wintilx.c (lxps_event_filter): Added: Active window detection
+- Nome que aparece na janela Propriedades do Painel mudado para Window Title
+
+#### Added
+- About info
 
 ### [1.0.0] - 2017-10-02
 #### Removed

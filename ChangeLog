@@ -1,4 +1,8 @@
 
+2017-11-18  Alexandre C Vieira <acamargo.vieira@gmail.com>
+
+	* wintilx.c (lxps_event_filter): Added: Active window detection Added: About info
+
 2017-10-17  Alexandre C Vieira <acamargo.vieira@gmail.com>
 
 	* wintilx.c (wintilx_event_filter): Adicionados eventos CreateNotify, DestroyNotify e UnmapNotify
