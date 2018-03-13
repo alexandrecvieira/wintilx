@@ -45,12 +45,11 @@ typedef struct {
 	LXPanel *panel;
 	GtkWidget *label;
 	Window *current_window;
-	//char *desktop_name;
 	char *window_title;
 	char *app_name;
 	char *version;
 	Atom title_source;
-	guint32 *color;
+	guint32 color;
 } WintilxPlugin;
 
 static void wintilx_destructor(gpointer user_data);
@@ -125,9 +124,6 @@ static GdkFilterReturn wintilx_event_filter(GdkXEvent *xevent, GdkEvent *event, 
 	WintilxPlugin *wtlx = (WintilxPlugin *) user_data;
 	XEvent *ev = (XEvent *) xevent;
 
-	ENTER;
-	// DBG("win = 0x%x\n", ev->xproperty.window);
-
 	wtlx->current_window = get_xaproperty(gdk_x11_get_default_root_xwindow(), a_NET_ACTIVE_WINDOW, XA_WINDOW, 0);
 
 	if (ev->type == CreateNotify || ev->type == DestroyNotify || ev->type == UnmapNotify || ev->type == MapNotify
@@ -137,7 +133,7 @@ static GdkFilterReturn wintilx_event_filter(GdkXEvent *xevent, GdkEvent *event, 
 			wintilx_update_main_label(wtlx);
 		}
 
-		RET(GDK_FILTER_CONTINUE);
+		return GDK_FILTER_CONTINUE;
 	}
 
 	return GDK_FILTER_CONTINUE;
@@ -160,11 +156,10 @@ static GtkWidget *wintilx_constructor(LXPanel *panel, config_setting_t *settings
 	g_return_val_if_fail(wtlx != NULL, 0);
 	wtlx->panel = panel;
 
-	if (wtlx->panel->priv->usefontcolor) {
+	if (wtlx->panel->priv->usefontcolor)
 		wtlx->color = gcolor2rgb24(&wtlx->panel->priv->gfontcolor);
-	} else {
+	else
 		wtlx->color = 0;
-	}
 
 	p = gtk_event_box_new();
 
@@ -223,7 +218,7 @@ static GtkWidget *wintilx_configure(LXPanel *panel, GtkWidget *p) {
 			NULL, p,
 			g_strconcat("Wintilx ", g_strdup(wtlx->version), NULL), NULL, CONF_TYPE_TRIM,
 			"Window Title Plugin for LXPanel", NULL, CONF_TYPE_TRIM,
-			"Copyright (C) 2017", NULL, CONF_TYPE_TRIM,
+			"Copyright (C) 2018", NULL, CONF_TYPE_TRIM,
 			" ", NULL, CONF_TYPE_TRIM,
 			NULL);
 }
