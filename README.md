@@ -39,6 +39,8 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 ## CHANGELOG
 
 ### [Unreleased]
+#### Fixed
+- warning: assignment makes pointer from integer without a cast [-Wint-conversion]
 
 ### [1.0.1] - 2017-10-02
 #### Fixed
