@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2017 Alexandre C Vieira
+ * Copyright (c) 2017-2018 Alexandre C Vieira
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -218,7 +218,7 @@ static GtkWidget *wintilx_configure(LXPanel *panel, GtkWidget *p) {
 			NULL, p,
 			g_strconcat("Wintilx ", g_strdup(wtlx->version), NULL), NULL, CONF_TYPE_TRIM,
 			"Window Title Plugin for LXPanel", NULL, CONF_TYPE_TRIM,
-			"Copyright (C) 2018", NULL, CONF_TYPE_TRIM,
+			"Copyright (c) 2017-2018", NULL, CONF_TYPE_TRIM,
 			" ", NULL, CONF_TYPE_TRIM,
 			NULL);
 }
