@@ -19,7 +19,7 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 #### Para instalar pelo source:
 ##### Importante: O path: /usr/lib/x86_64-linux-gnu/lxpanel/plugins é o local de instalação dos plugins do LXPanel
 ##### Usei o Eclipse Neon(4.6) para implementar o projeto
-	git clone https://github.com/acamargovieira/wintilx.git
+	git clone https://github.com/alexandrecvieira/wintilx.git
 	cd wintilx
 	autoreconf -f
 	./configure --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu/lxpanel/plugins
@@ -28,11 +28,11 @@ Tutorial referência: http://wiki.lxde.org/en/How_to_write_plugins_for_LXPanel
 	
 #### Para adicionar ao LXPanel:
 	
-![wintilx-add](https://user-images.githubusercontent.com/20074560/30779181-9473e258-a0bf-11e7-9d68-2b42aad76270.png)
+![wintilx-add](http://alexandrecvieira.droppages.com/images/wintilx/wintilx-add-to-panel.png)
 
 ##### Então você terá o título da janela ativa aparecendo no LXPanel:
 	
-![wintilx](https://user-images.githubusercontent.com/20074560/31030072-66c0fc28-a52a-11e7-8394-cd397e242325.gif)
+![wintilx](http://alexandrecvieira.droppages.com/images/wintilx/wintilx.gif)
 
 ##### Testado no LXPanel versões 0.7.2 | 0.8.2 | 0.9.3 
 
